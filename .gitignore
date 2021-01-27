@@ -1,2 +1,8 @@
 /node_modules
 package-lock.json
+default.json
+client/build
+client/node_modules
+config/default.json
+validation
+_resources
