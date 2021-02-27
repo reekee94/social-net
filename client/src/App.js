@@ -7,9 +7,9 @@ import './App.css'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Alert from "./components/layout/Alert";
 import Dashboard from "./components/dashboard/Dashboard";
-import CreateProfile from "./components/profile-form/CreateProfile";
-import AddExperience from "./components/profile-form/AddExperience"
-import AddEducation from "./components/profile-form/AddEducation";
+//import CreateBank from "./components/forms/CreateBank";
+import Mortgages from "./components/mortgage/Mortgages";
+import AddLoan from "./components/forms/AddLoan";
 import PrivateRoute from "./components/routing/PrivateRoute";
 
 import { loadUser } from './actions/auth'
@@ -18,6 +18,7 @@ import setAuthToken from "./utils/setAuthToken";
 //Redux
 import {Provider} from 'react-redux'
 import store from './store'
+import CreateBank from "./components/forms/CreateBank";
 
 
 if (localStorage.token) {
@@ -41,10 +42,10 @@ const App = () => {
               <Route exact path={'/register'} component={Register}/>
               <Route exact path={'/login'} component={Login}/>
               <PrivateRoute exact path={'/dashboard'} component={Dashboard}/>
-              <PrivateRoute exact path={'/create-profile'} component={CreateProfile}/>
-              <PrivateRoute exact path={'/edit-profile'} component={CreateProfile}/>
-              <PrivateRoute exact path={'/add-experience'} component={AddExperience}/>
-              <PrivateRoute exact path={'/add-education'} component={AddEducation}/>
+              <PrivateRoute exact path={'/create-bank'} component={CreateBank}/>
+              {/*<PrivateRoute exact path={'/edit-profile'} component={CreateProfile}/>*/}
+              <PrivateRoute exact path={'/add-loan'} component={AddLoan}/>
+              <PrivateRoute exact path={'/banks'} component={Mortgages}/>
             </Switch>
           </section>
         </Fragment>

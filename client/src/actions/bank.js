@@ -1,82 +1,71 @@
-import axios from "axios";
+import api from "../utils/api";
 import {setAlert} from "./alert";
 import {
-  CLEAR_PROFILE, DELETE_ACC,
-  GET_PROFILE,
-  GET_PROFILES,
-  PROFILE_ERROR,
-  UPDATE_PROFILE,
-  GET_REPOS
+  DELETE_ACC,
+  GET_BANK,
+  GET_BANKS,
+  BANK_ERROR,
+  UPDATE_BANK,
+  CLEAR_BANK
 } from "./types";
 
-//GET current Users profile
-export const getCurrentProfile = () => async dispatch => {
+//Get all banks
+export const getBanks = () => async dispatch => {
+  //dispatch({type: CLEAR_BANK})
   try {
-    const res = await axios.get('/api/profile/me')
+    const res = await api.get('/bank')
 
     dispatch({
-      type: GET_PROFILE,
+      type: GET_BANKS,
       payload: res.data
     })
   } catch (e) {
     dispatch({
-      type: PROFILE_ERROR,
-      payload: {msg: e.response.statusText, status: e.response.status}
-    })
-  }
-}
-// Get all profiles
-export const getProfiles = () => async dispatch => {
-  dispatch({type: CLEAR_PROFILE})
-  try {
-    const res = await axios.get('/api/profile')
-
-    dispatch({
-      type: GET_PROFILES,
-      payload: res.data
-    })
-  } catch (e) {
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: {msg: e.response.statusText, status: e.response.status}
-    })
-  }
-}
-//Get profile by ID
-export const getProfileById = (userId) => async dispatch => {
-  dispatch({type: CLEAR_PROFILE})
-  try {
-    const res = await axios.get(`/api/profile/user/${userId}`)
-
-    dispatch({
-      type: GET_PROFILES,
-      payload: res.data
-    })
-  } catch (e) {
-    dispatch({
-      type: PROFILE_ERROR,
+      type: BANK_ERROR,
       payload: {msg: e.response.statusText, status: e.response.status}
     })
   }
 }
 
-// Create or update profile
-export const createProfile = (formData, history, edit = false) => async (
+//Get bank by ID
+export const getBankById = (userId) => async dispatch => {
+  //dispatch({type: CLEAR_BANK})
+  console.log(userId, 'USER ID IN ACTIONS')
+  try {
+    const res = await api.get(`/bank/${userId}`)
+    console.log(res.data)
+    const bank = res.data
+
+    dispatch({
+      type: GET_BANK,
+      payload: bank
+    })
+  } catch (e) {
+    console.log(e);
+    dispatch({
+      type: BANK_ERROR,
+      payload: {msg: e.response.statusText, status: e.response.status}
+    })
+  }
+}
+
+// Create or update bank
+export const createBank = (formData, history) => async (
     dispatch
   ) => {
     try {
-      const res = await axios.post('api/profile', formData);
+      const res = await api.post('/bank', formData);
 
       dispatch({
-        type: GET_PROFILE,
+        type: GET_BANK,
         payload: res.data
       });
 
-      dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success'));
+      dispatch(setAlert('Bank Created', 'success'));
 
-      if (!edit) {
-        history.push('/dashboard');
-      }
+
+      history.push('/dashboard');
+
     } catch (err) {
       const errors = err.response.data.errors;
 
@@ -85,113 +74,24 @@ export const createProfile = (formData, history, edit = false) => async (
       }
 
       dispatch({
-        type: PROFILE_ERROR,
+        type: BANK_ERROR,
         payload: { msg: err.response.statusText, status: err.response.status }
       });
     }
   };
 
-//Add exp
-export const addExperience = (formData, history) => async (dispatch) => {
-  try {
-    const res = await axios.put('api/profile/experience', formData);
-
-    dispatch({
-      type: UPDATE_PROFILE,
-      payload: res.data
-    });
-
-    dispatch(setAlert('Experience Added', 'success'));
-
-    history.push('/dashboard');
-  } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
-    }
-
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
-};
-
-export const addEducation = (formData, history) => async dispatch => {
-  try {
-    const res = await axios.put('api/profile/education', formData);
-
-    dispatch({
-      type: UPDATE_PROFILE,
-      payload: res.data
-    });
-
-    dispatch(setAlert('Education Added', 'success'));
-
-    history.push('/dashboard');
-  } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
-    }
-
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
-};
-
-//DELETE EXP
-
-export const deleteExperience = id => async dispatch => {
-  try {
-    const res = await axios.delete(`/api/profile/experience/${id}`)
-    dispatch({
-      type: UPDATE_PROFILE,
-      payload: res.data
-    })
-
-    dispatch(setAlert('Experience Removed', 'success'))
-  } catch (err) {
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
-}
-
-// Delete EDU
-export const deleteEducation = id => async dispatch => {
-  try {
-    const res = await axios.delete(`/api/profile/education/${id}`)
-    dispatch({
-      type: UPDATE_PROFILE,
-      payload: res.data
-    })
-
-    dispatch(setAlert('Education Removed', 'success'))
-  } catch (err) {
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
-  }
-}
 
 //DELETE ACC
 export const deleteAccount = () => async dispatch => {
   if (window.confirm('Are you sure? It cant be undone!')) {
     try {
-      const res = await axios.delete(`/api/profile`)
-      dispatch({type: CLEAR_PROFILE})
+      const res = await api.delete(`/bank`)
+      //dispatch({type: CLEAR_BANK})
       dispatch({type: DELETE_ACC})
       dispatch(setAlert('Your account has been delete'))
     } catch (err) {
       dispatch({
-        type: PROFILE_ERROR,
+        type: BANK_ERROR,
         payload: {msg: err.response.statusText, status: err.response.status}
       });
     }

@@ -2,13 +2,12 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createProfile, getCurrentProfile } from '../../actions/bank';
+import { createBank, getBankById} from '../../actions/bank';
 
 const initialState = {
-  name: '',
+  bank_name: '',
   website: '',
   location: '',
-  skills: '',
   bio: '',
   loan_term: '',
   interest_rate: '',
@@ -17,31 +16,30 @@ const initialState = {
 }
 
 const CreateBank =({
-                        profile: { profile, loading },
-                        createProfile,
-                        getCurrentProfile,
-                        history
+                        bank: { bank, loading, banks },
+                        history,
+                        createBank,
+  getBankById
 }) => {
   const [formData, setFormData] = useState(initialState)
 
   useEffect(() => {
-    if (!profile) getCurrentProfile();
-    if (!loading && profile) {
-      const profileData = { ...initialState };
-      for (const key in profile) {
-        if (key in profileData) profileData[key] = profile[key];
-      }
+    // if (true) getBankById(key);
+    // if (!loading && key) {
+    //   const profileData = { ...initialState };
+    //   for (const key in bank) {
+    //     if (key in profileData) profileData[key] = bank[key];
+    //   }
       // if (Array.isArray(profileData.skills))
       //   profileData.skills = profileData.skills.join(', ');
-      setFormData(profileData);
-    }
-  }, [loading, getCurrentProfile, profile]);
+    //   setFormData(profileData);
+    // }
+  }, [loading, bank, getBankById]);
 
   const {
-    name,
+    bank_name,
     website,
     location,
-    skills,
     bio,
     loan_term,
     interest_rate,
@@ -54,7 +52,7 @@ const CreateBank =({
 
   const onSubmit = e => {
     e.preventDefault();
-    createProfile(formData, history, profile ? true : false);
+    createBank(formData, history, bank ? true : false);
   };
 
   return (
@@ -84,27 +82,15 @@ const CreateBank =({
         <div className="form-group">
           <input
             type="text"
-            placeholder="Name"
-            name="name"
-            value={name}
+            placeholder="Banks name"
+            name="bank_name"
+            value={bank_name}
             onChange={onChange}
           />
           <small className="form-text">
-            Enter name for a bank
+            Enter for a banks name
           </small>
         </div>
-        {/*<div className="form-group">*/}
-        {/*  <input*/}
-        {/*    type="text"*/}
-        {/*    placeholder="Company"*/}
-        {/*    name="company"*/}
-        {/*    value={company}*/}
-        {/*    onChange={onChange}*/}
-        {/*  />*/}
-        {/*  <small className="form-text">*/}
-        {/*    Could be your own company or one you work for*/}
-        {/*  </small>*/}
-        {/*</div>*/}
         <div className="form-group">
           <input
             type="text"
@@ -172,22 +158,9 @@ const CreateBank =({
           onChange={onChange}
         />
         <small className="form-text">
-          Please use 
+          Please use
         </small>
       </div>
-        {/*<div className="form-group">*/}
-        {/*  <input*/}
-        {/*    type="text"*/}
-        {/*    placeholder="Github Username"*/}
-        {/*    name="githubusername"*/}
-        {/*    value={githubusername}*/}
-        {/*    onChange={onChange}*/}
-        {/*  />*/}
-        {/*  <small className="form-text">*/}
-        {/*    If you want your latest repos and a Github link, include your*/}
-        {/*    username*/}
-        {/*  </small>*/}
-        {/*</div>*/}
         <div className="form-group">
           <textarea
             placeholder="A short history of bank"
@@ -233,41 +206,6 @@ const CreateBank =({
         {/*      />*/}
         {/*    </div>*/}
 
-        {/*    <div className="form-group social-input">*/}
-        {/*      <i className="fab fa-youtube fa-2x" />*/}
-        {/*      <input*/}
-        {/*        type="text"*/}
-        {/*        placeholder="YouTube URL"*/}
-        {/*        name="youtube"*/}
-        {/*        value={youtube}*/}
-        {/*        onChange={onChange}*/}
-        {/*      />*/}
-        {/*    </div>*/}
-
-        {/*    <div className="form-group social-input">*/}
-        {/*      <i className="fab fa-linkedin fa-2x" />*/}
-        {/*      <input*/}
-        {/*        type="text"*/}
-        {/*        placeholder="Linkedin URL"*/}
-        {/*        name="linkedin"*/}
-        {/*        value={linkedin}*/}
-        {/*        onChange={onChange}*/}
-        {/*      />*/}
-        {/*    </div>*/}
-
-        {/*    <div className="form-group social-input">*/}
-        {/*      <i className="fab fa-instagram fa-2x" />*/}
-        {/*      <input*/}
-        {/*        type="text"*/}
-        {/*        placeholder="Instagram URL"*/}
-        {/*        name="instagram"*/}
-        {/*        value={instagram}*/}
-        {/*        onChange={onChange}*/}
-        {/*      />*/}
-        {/*    </div>*/}
-        {/*  </Fragment>*/}
-        {/*)}*/}
-
         <input type="submit" className="btn btn-primary my-1" />
         <Link className="btn btn-light my-1" to="/dashboard">
           Go Back
@@ -278,15 +216,18 @@ const CreateBank =({
 };
 
 CreateBank.propTypes = {
-  createProfile: PropTypes.func.isRequired,
-  getCurrentProfile: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired
+  createBank: PropTypes.func.isRequired,
+  getBankById: PropTypes.func.isRequired,
+  bank: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
+  id: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  profile: state.profile
+  auth: state.auth,
+  bank: state.bank
 });
 
-export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
+export default connect(mapStateToProps, { createBank, getBankById })(
   CreateBank
 );

@@ -8,10 +8,11 @@ import {logout} from '../../actions/auth'
 const Navbar = ({auth: {isAuthenticated, loading}, logout}) => {
   const authLinks = (
     <ul>
+      <li><Link to="/banks">Banks</Link></li>
       <li>
         <Link to={'/dashboard'}>
           <i className={'fas fa-user'}></i>{''}
-          <span className={'hide-sm'}> Dashboard </span>
+          <span className={'hide-sm'}> Bank Creator </span>
         </Link>
       </li>
       <li>
@@ -28,7 +29,7 @@ const Navbar = ({auth: {isAuthenticated, loading}, logout}) => {
 
   const guestLinks = (
     <ul>
-      <li><Link to="#!">Developers</Link></li>
+      {/*<li><Link to="#!">Banks</Link></li>*/}
       <li><Link to="/register">Register</Link></li>
       <li><Link to="/login">Login</Link></li>
     </ul>
@@ -37,7 +38,7 @@ const Navbar = ({auth: {isAuthenticated, loading}, logout}) => {
   return (
     <nav className="navbar bg-dark">
       <h1>
-        <Link to="/"><i className="fas fa-code"></i> DevConnector</Link>
+        <Link to="/"><i className="fas fa-code"></i> Mortgage Calculator</Link>
       </h1>
       { !loading && ( <Fragment> {isAuthenticated ? authLinks : guestLinks}</Fragment>)}
     </nav>

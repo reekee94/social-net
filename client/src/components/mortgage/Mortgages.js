@@ -2,10 +2,8 @@ import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
-import BankItem from './BankItem';
 import { getBanks } from '../../actions/bank';
-import {Link} from "react-router-dom";
-import DashboardActions from "../dashboard/DashboardActions";
+import BankItem from "./MorgtageItem";
 
 const Banks = ({ getBanks, bank: { banks, loading } }) => {
   useEffect(() => {
@@ -14,12 +12,11 @@ const Banks = ({ getBanks, bank: { banks, loading } }) => {
 
   return (
     <Fragment>
-      <DashboardActions/>
       {loading ? (
         <Spinner />
       ) : (
         <Fragment>
-          <h1 className='large text-primary'>Developers</h1>
+          <h1 className='large text-primary'>Banks</h1>
           <p className='lead'>
             <i className='fab fa-connectdevelop' /> Browse and connect with
             developers
@@ -30,7 +27,7 @@ const Banks = ({ getBanks, bank: { banks, loading } }) => {
                 <BankItem key={bank._id} bank={bank} />
               ))
             ) : (
-              <h4>No banks found...</h4>
+              <h4>No bank found...</h4>
             )}
           </div>
         </Fragment>

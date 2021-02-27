@@ -2,27 +2,28 @@ import React, {Fragment, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import Spinner from "../layout/Spinner";
-import {deleteAccount, getCurrentProfile} from "../../actions/profile";
+import {deleteAccount, getBanks} from "../../actions/bank";
 import {Link} from "react-router-dom";
 import DashboardActions from "./DashboardActions";
-import Experience from "./Experience";
 import Education from "./Education";
+import Banks from "../banks/Banks";
 
-const Dashboard = ({getCurrentProfile, deleteAccount, auth: {user}, profile: {profile, loading}}) => {
+
+const Dashboard = ({getBanks, deleteAccount, auth: {user}, bank: {banks, loading}}) => {
   useEffect(()=>{
-    getCurrentProfile()
+    getBanks()
   }, [])
-  return loading && profile === null ? (<Spinner />) : (
+  return loading && banks === null ? (<Spinner />) : (
     <Fragment>
-      <h1 className={'large text-primary'}>Dashboard</h1>
+      <h1 className={'large text-primary'}>Bank options</h1>
       <p className={'lead'}>
         <i className={'fas fa-user'}/>Welcome {user && user.name}
       </p>
-      {profile !== null ? (
+      {banks !== null ? (
         <Fragment>
-          <DashboardActions/>
-          <Experience experience={profile.experience}/>
-          <Education education={profile.education}/>
+          <Education loan={banks}/>
+          HERE
+          <Banks />
 
           <div className={"my-2"}>
             <button className={"btn btn-danger"} onClick={() => deleteAccount()}>
@@ -32,9 +33,10 @@ const Dashboard = ({getCurrentProfile, deleteAccount, auth: {user}, profile: {pr
         </Fragment>
         ) : (
           <Fragment> <p>
-            Please add some info about yourself
+            Create and calculate mortgage for your personal needs.
           </p>
-          <Link to={'/create-profile'} className={'btn btn-primary my-1'}> Create Profile </Link>
+          <Link to={'/create-bank'} className={'btn btn-primary my-1'}> Create bank </Link>
+          <Link to={'/create-mortgage'} className={'btn btn-warning'}> Create mortgage </Link>
           </Fragment>
           )}
     </Fragment>
@@ -42,15 +44,17 @@ const Dashboard = ({getCurrentProfile, deleteAccount, auth: {user}, profile: {pr
 };
 
 Dashboard.propTypes = {
-  getCurrentProfile: PropTypes.func.isRequired,
+  getBanks: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  profile: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  bank: PropTypes.object.isRequired,
   deleteAccount: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state =>({
   auth: state.auth,
-  profile: state.profile
+  user: state.user,
+  bank: state.bank
 })
 
-export default connect(mapStateToProps, {getCurrentProfile, deleteAccount})(Dashboard);
+export default connect(mapStateToProps, {getBanks, deleteAccount})(Dashboard);

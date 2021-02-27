@@ -78,4 +78,4 @@ AddLoan.propTypes = {
   addExperience: PropTypes.func.isRequired,
 };
 
-export default connect(null, {addEducation})(AddLoan);
+export default connect(null, {})(AddLoan);

@@ -1,52 +1,26 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const BankSchema = new Schema({
-  user: {
+const LoansSchema = new Schema({
+  bankId: {
     type: Schema.Types.ObjectId
   },
-  text: {
+  init_loan: {
     type: String,
     required: true
   },
-  name: {
-    type: String
+  down_payment:{
+    type: String,
+    required: true
   },
-  avatar: {
-    type: String
+  month: {
+    type: String,
+    required: true
   },
-  likes: [
-    {
-      user: {
-        type: Schema.Types.ObjectId
-      }
-    }
-  ],
-  comments: [
-    {
-      user: {
-        type: Schema.Types.ObjectId
-      },
-      text: {
-        type: String,
-        required: true
-      },
-      name: {
-        type: String
-      },
-      avatar: {
-        type: String
-      },
-      date: {
-        type: Date,
-        default: Date.now
-      }
-    }
-  ],
   date: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = mongoose.model('banks', BankSchema);
+module.exports = mongoose.model('loans', LoansSchema);
