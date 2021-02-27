@@ -8,16 +8,16 @@ const { check, validationResult } = require('express-validator');
 const normalize = require('normalize-url');
 const checkObjectId = require('../../middleware/checkObjectId');
 
-const Profile = require('../../models/Profile');
+const Bank = require('../../models/Bank');
 const User = require('../../models/User');
-const Post = require('../../models/Post');
+const Post = require('../../models/Loans');
 
 // @route    GET api/profile/me
 // @desc     Get current users profile
 // @access   Private
 router.get('/me', auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({
+    const profile = await Bank.findOne({
       user: req.user.id
     }).populate('user', ['name', 'avatar']);
 
@@ -86,7 +86,7 @@ router.post(
 
     try {
       // Using upsert option (creates new doc if no match is found):
-      let profile = await Profile.findOneAndUpdate(
+      let profile = await Bank.findOneAndUpdate(
         { user: req.user.id },
         { $set: profileFields },
         { new: true, upsert: true, setDefaultsOnInsert: true }
@@ -104,7 +104,7 @@ router.post(
 // @access   Public
 router.get('/', async (req, res) => {
   try {
-    const profiles = await Profile.find().populate('user', ['name', 'avatar']);
+    const profiles = await Bank.find().populate('user', ['name', 'avatar']);
     res.json(profiles);
   } catch (err) {
     console.error(err.message);
@@ -120,11 +120,11 @@ router.get(
   checkObjectId('user_id'),
   async ({ params: { user_id } }, res) => {
     try {
-      const profile = await Profile.findOne({
+      const profile = await Bank.findOne({
         user: user_id
       }).populate('user', ['name', 'avatar']);
 
-      if (!profile) return res.status(400).json({ msg: 'Profile not found' });
+      if (!profile) return res.status(400).json({ msg: 'Bank not found' });
 
       return res.json(profile);
     } catch (err) {
@@ -144,7 +144,7 @@ router.delete('/', auth, async (req, res) => {
     // Remove user
     await Promise.all([
       Post.deleteMany({ user: req.user.id }),
-      Profile.findOneAndRemove({ user: req.user.id }),
+      Bank.findOneAndRemove({ user: req.user.id }),
       User.findOneAndRemove({ _id: req.user.id })
     ]);
 
@@ -173,7 +173,7 @@ router.put(
     }
 
     try {
-      const profile = await Profile.findOne({ user: req.user.id });
+      const profile = await Bank.findOne({ user: req.user.id });
 
       profile.experience.unshift(req.body);
 
@@ -193,7 +193,7 @@ router.put(
 
 router.delete('/experience/:exp_id', auth, async (req, res) => {
   try {
-    const foundProfile = await Profile.findOne({ user: req.user.id });
+    const foundProfile = await Bank.findOne({ user: req.user.id });
 
     foundProfile.experience = foundProfile.experience.filter(
       (exp) => exp._id.toString() !== req.params.exp_id
@@ -226,7 +226,7 @@ router.put(
     }
 
     try {
-      const profile = await Profile.findOne({ user: req.user.id });
+      const profile = await Bank.findOne({ user: req.user.id });
 
       profile.education.unshift(req.body);
 
@@ -246,7 +246,7 @@ router.put(
 
 router.delete('/education/:edu_id', auth, async (req, res) => {
   try {
-    const foundProfile = await Profile.findOne({ user: req.user.id });
+    const foundProfile = await Bank.findOne({ user: req.user.id });
     foundProfile.education = foundProfile.education.filter(
       (edu) => edu._id.toString() !== req.params.edu_id
     );
