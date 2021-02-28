@@ -23,10 +23,10 @@ const BankItem = ({
           {bank_name} {min_loan && <span> at {max_loan}</span>}
         </p>
         <p className='my-1'>{min_down_payment && <span>{interest_rate}</span>}</p>
-        <Link to={`/create-bank`} className='btn btn-primary' onClick={getBankById(_id)}>
+        <Link to={`/bank/${_id}`} className='btn btn-primary'>
           Edit Bank
         </Link>
-        <Link to={`/create-bank`} className='btn btn-danger'>
+        <Link to={`/bank/${_id}`} className='btn btn-danger'>
           Remove Bank
         </Link>
       </div>

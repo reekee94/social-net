@@ -16,24 +16,25 @@ const initialState = {
 }
 
 const CreateBank =({
-                        bank: { bank, loading, banks },
+                        bank: { bank, loading },
                         history,
                         createBank,
-  getBankById
+  getBankById, match
 }) => {
   const [formData, setFormData] = useState(initialState)
 
   useEffect(() => {
-    // if (true) getBankById(key);
-    // if (!loading && key) {
-    //   const profileData = { ...initialState };
-    //   for (const key in bank) {
-    //     if (key in profileData) profileData[key] = bank[key];
-    //   }
-      // if (Array.isArray(profileData.skills))
-      //   profileData.skills = profileData.skills.join(', ');
-    //   setFormData(profileData);
-    // }
+    if(!bank) getBankById(match.params.id);
+    if (!loading && match.params.id) {
+      const profileData = { ...initialState };
+      for (const key in bank) {
+        if (key in profileData) profileData[key] = bank[key];
+      }
+      if (Array.isArray(profileData.loans))
+        profileData.loans = profileData.loans.join(', ');
+
+      setFormData(profileData);
+    }
   }, [loading, bank, getBankById]);
 
   const {

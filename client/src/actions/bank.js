@@ -29,7 +29,7 @@ export const getBanks = () => async dispatch => {
 
 //Get bank by ID
 export const getBankById = (userId) => async dispatch => {
-  //dispatch({type: CLEAR_BANK})
+  dispatch({type: CLEAR_BANK})
   console.log(userId, 'USER ID IN ACTIONS')
   try {
     const res = await api.get(`/bank/${userId}`)
