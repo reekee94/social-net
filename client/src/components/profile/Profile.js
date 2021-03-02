@@ -12,6 +12,7 @@ import { getProfileById } from '../../actions/profile';
 
 const Profile = ({ getProfileById, profile: { profile }, auth, match }) => {
   useEffect(() => {
+    console.log(match.params.id);
     getProfileById(match.params.id);
   }, [getProfileById, match.params.id]);
 
